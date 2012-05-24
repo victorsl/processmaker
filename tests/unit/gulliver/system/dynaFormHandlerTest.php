@@ -148,7 +148,7 @@ class dynaFormHandlerTest extends PHPUnit_Framework_TestCase
       
       $this->assertObjectHasAttribute("root", $obj);
       
-      //html file not is a xml file then throw exception
+      //File with extension .html not is a xml file then throw exception
       try {
         $obj = new dynaFormHandler($this->dynaFormFile . ".html");
       }
@@ -158,7 +158,7 @@ class dynaFormHandlerTest extends PHPUnit_Framework_TestCase
  
       $this->fail("An expected exception has not been raised (invalid xml file)");
       
-      //xxx file not is valid then throw exception
+      //File with extension .xxx not exist then throw exception
       try {
         $obj = new dynaFormHandler($this->dynaFormFile . ".xxx");
       }
@@ -191,19 +191,16 @@ class dynaFormHandlerTest extends PHPUnit_Framework_TestCase
       $arrayNodeName = $this->getRandNameNode(1, $this->dynaFormFile . ".xml");
       $nodeName = $arrayNodeName[0];
       
-      ///////
       $xmlTmp = $this->dynaFormFile . "Tmp.xml";
       
       copy($this->dynaFormFile . ".xml", $xmlTmp);
       
-      ///////
       $obj = new dynaFormHandler($xmlTmp);
       
       $obj->__cloneEmpty();
       
       $this->assertTrue($this->nodeExists($nodeName, $xmlTmp) == 0);
       
-      ///////
       unlink($xmlTmp);
     }
 
@@ -243,7 +240,6 @@ class dynaFormHandlerTest extends PHPUnit_Framework_TestCase
       
       copy($this->dynaFormFile . ".xml", $xmlTmp);
       
-      ///////
       $obj = new dynaFormHandler($xmlTmp);
       
       $node = new DOMElement("NODE", "My value", "xmlnsAttributeValue");
@@ -251,7 +247,6 @@ class dynaFormHandlerTest extends PHPUnit_Framework_TestCase
       
       $this->assertTrue($newNode->getAttribute("xmlns") == "xmlnsAttributeValue");
       
-      ///////
       unlink($xmlTmp);
     }
 
@@ -265,7 +260,6 @@ class dynaFormHandlerTest extends PHPUnit_Framework_TestCase
       
       copy($this->dynaFormFile . ".xml", $xmlTmp);
       
-      ///////
       $obj = new dynaFormHandler($xmlTmp);
       
       $obj->add("NODE1", array("attribute" => "value attribute"), "value node");
@@ -283,7 +277,6 @@ class dynaFormHandlerTest extends PHPUnit_Framework_TestCase
       $this->assertTrue($this->nodeExists("NODE2SUBNODE1", $xmlTmp) == 1);
       $this->assertTrue($this->nodeExists("NODE3SUBNODE1SUBNODE2", $xmlTmp) == 1);
       
-      ///////
       unlink($xmlTmp);
     }
 
@@ -296,12 +289,10 @@ class dynaFormHandlerTest extends PHPUnit_Framework_TestCase
       $arrayNodeName = $this->getRandNameNode(1, $this->dynaFormFile . ".xml");
       $nodeName = $arrayNodeName[0];
       
-      ///////
       $xmlTmp = $this->dynaFormFile . "Tmp.xml";
       
       copy($this->dynaFormFile . ".xml", $xmlTmp);
       
-      ///////
       $arrayAttribute = array("#text" => "text", "#cdata" => "cdata", "attribute1" => "value1", "attribute2" => "value2");
       
       $obj = new dynaFormHandler($xmlTmp);
@@ -311,7 +302,6 @@ class dynaFormHandlerTest extends PHPUnit_Framework_TestCase
       $nodeName3 = $nodeName2 . "_";
       $nodeName4 = $nodeName3 . "_";
       
-      ///////
       $obj->replace($nodeName, $nodeName1, $arrayAttribute);
       
       $node = $this->getNode($nodeName1, $xmlTmp);
@@ -321,17 +311,14 @@ class dynaFormHandlerTest extends PHPUnit_Framework_TestCase
       $this->assertTrue($node->hasAttribute("attribute1"));
       $this->assertTrue($node->getAttribute("attribute1") == "value1");
       
-      ///////
       $obj->replace($nodeName1, $nodeName2, $arrayAttribute, "value node");
       
       $this->assertTrue($this->nodeExists($nodeName2, $xmlTmp) == 1);
       
-      ///////
       $obj->replace($nodeName2, $nodeName3, $arrayAttribute, array("SUBNODE1" => "value node", "SUBNODE2" => array("cdata" => "value cdata")));
       
       $this->assertTrue($this->nodeExists("SUBNODE2", $xmlTmp) == 1);
       
-      ///////
       $subsubNode = array(
         array("name" => "SUBNODESUBNODE1", "value" => "value node", "attributes" => array("attribute1" => "value attribute", "attribute2" => "value attribute")),
         array("name" => "SUBNODESUBNODE2", "value" => "value node", "attributes" => array("attribute1" => "value attribute", "attribute2" => "value attribute"))
@@ -341,7 +328,6 @@ class dynaFormHandlerTest extends PHPUnit_Framework_TestCase
       
       $this->assertTrue($this->nodeExists("SUBNODESUBNODE2", $xmlTmp) == 1);
       
-      ///////
       unlink($xmlTmp);
     }
 
@@ -356,7 +342,6 @@ class dynaFormHandlerTest extends PHPUnit_Framework_TestCase
       
       copy($this->dynaFormFile . ".xml", $xmlTmp);
       
-      ///////
       $obj = new dynaFormHandler($xmlTmp);
       
       $obj->save($xmlTmp2);
@@ -367,7 +352,6 @@ class dynaFormHandlerTest extends PHPUnit_Framework_TestCase
       
       $this->assertTrue(file_exists($xmlTmp2));
       
-      ///////
       unlink($xmlTmp);
       unlink($xmlTmp2);
       
@@ -392,14 +376,12 @@ class dynaFormHandlerTest extends PHPUnit_Framework_TestCase
       
       copy($this->dynaFormFile . ".xml", $xmlTmp);
       
-      ///////
       $obj = new dynaFormHandler($xmlTmp);
       
       $obj->fixXmlFile();
       
       $this->assertTrue(count(file($this->dynaFormFile . ".xml")) >= count(file($xmlTmp)));
       
-      ///////
       unlink($xmlTmp);
     }
 
@@ -413,7 +395,6 @@ class dynaFormHandlerTest extends PHPUnit_Framework_TestCase
       
       copy($this->dynaFormFile . ".xml", $xmlTmp);
       
-      ///////
       $obj = new dynaFormHandler($xmlTmp);
       
       $obj->setHeaderAttribute("attribute1", "value1");
@@ -423,7 +404,6 @@ class dynaFormHandlerTest extends PHPUnit_Framework_TestCase
       $this->assertTrue($node->hasAttribute("attribute1"));
       $this->assertTrue($node->getAttribute("attribute1") == "value1");
       
-      ///////
       unlink($xmlTmp);
     }
 
@@ -437,7 +417,6 @@ class dynaFormHandlerTest extends PHPUnit_Framework_TestCase
       
       copy($this->dynaFormFile . ".xml", $xmlTmp);
       
-      ///////
       $obj = new dynaFormHandler($xmlTmp);
       
       $obj->setHeaderAttribute("attribute1", "value1");
@@ -447,7 +426,6 @@ class dynaFormHandlerTest extends PHPUnit_Framework_TestCase
       $this->assertTrue($node->hasAttribute("attribute1"));
       $this->assertTrue($node->getAttribute("attribute1") == "value1");
       
-      ///////
       $obj->modifyHeaderAttribute("attribute1", "value2");
       
       $node = $this->getNode("dynaForm", $xmlTmp);
@@ -455,7 +433,6 @@ class dynaFormHandlerTest extends PHPUnit_Framework_TestCase
       $this->assertTrue($node->hasAttribute("attribute1"));
       $this->assertTrue($node->getAttribute("attribute1") == "value2");
       
-      ///////
       unlink($xmlTmp);
     }
 
@@ -468,12 +445,10 @@ class dynaFormHandlerTest extends PHPUnit_Framework_TestCase
       $arrayNodeName = $this->getRandNameNode(1, $this->dynaFormFile . ".xml");
       $nodeName = $arrayNodeName[0];
       
-      ///////
       $xmlTmp = $this->dynaFormFile . "Tmp.xml";
       
       copy($this->dynaFormFile . ".xml", $xmlTmp);
       
-      ///////
       $obj = new dynaFormHandler($xmlTmp);
       
       $obj->updateAttribute($nodeName, "type", "title2");
@@ -483,7 +458,6 @@ class dynaFormHandlerTest extends PHPUnit_Framework_TestCase
       $this->assertTrue($node->hasAttribute("type"));
       $this->assertTrue($node->getAttribute("type") == "title2");
       
-      ///////
       unlink($xmlTmp);
     }
 
@@ -496,12 +470,10 @@ class dynaFormHandlerTest extends PHPUnit_Framework_TestCase
       $arrayNodeName = $this->getRandNameNode(1, $this->dynaFormFile . ".xml");
       $nodeName = $arrayNodeName[0];
       
-      ///////
       $xmlTmp = $this->dynaFormFile . "Tmp.xml";
       
       copy($this->dynaFormFile . ".xml", $xmlTmp);
       
-      ///////
       $obj = new dynaFormHandler($xmlTmp);
       
       $obj->remove($nodeName); //XML_ELEMENT_NODE
@@ -509,22 +481,18 @@ class dynaFormHandlerTest extends PHPUnit_Framework_TestCase
       
       $this->assertTrue($this->nodeExists($nodeName, $xmlTmp) == 0);
       
-      ///////
       unlink($xmlTmp);
       
-      ///////
       $xmlTmp = $this->dynaFormFile . "Tmp.xml";
       
       copy($this->dynaFormFile . ".xml", $xmlTmp);
       
-      ///////
       $obj = new dynaFormHandler($xmlTmp);
       
       $obj->remove(array($nodeName));
       
       $this->assertTrue($this->nodeExists($nodeName, $xmlTmp) == 0);
       
-      ///////
       unlink($xmlTmp);
     }
 
@@ -537,7 +505,6 @@ class dynaFormHandlerTest extends PHPUnit_Framework_TestCase
       $arrayNodeName = $this->getRandNameNode(1, $this->dynaFormFile . ".xml");
       $nodeName = $arrayNodeName[0];
       
-      ///////
       $obj = new dynaFormHandler($this->dynaFormFile . ".xml");
       
       $this->assertTrue($obj->nodeExists($nodeName));
@@ -553,12 +520,10 @@ class dynaFormHandlerTest extends PHPUnit_Framework_TestCase
       $arrayNodeName = $this->getRandNameNode(1, $this->dynaFormFile . ".xml");
       $nodeName = $arrayNodeName[0];
       
-      ///////
       $xmlTmp = $this->dynaFormFile . "Tmp.xml";
       
       copy($this->dynaFormFile . ".xml", $xmlTmp);
       
-      ///////
       $posPre = $this->getPosNode($nodeName, $xmlTmp);
       $pos    = ($posPre > 0)? $posPre - 1 : $this->numNodes($xmlTmp) - 1;
       
@@ -568,7 +533,6 @@ class dynaFormHandlerTest extends PHPUnit_Framework_TestCase
       
       $this->assertTrue($this->getPosNode($nodeName, $xmlTmp) == $pos);
       
-      ///////
       unlink($xmlTmp);
     }
 
@@ -581,12 +545,10 @@ class dynaFormHandlerTest extends PHPUnit_Framework_TestCase
       $arrayNodeName = $this->getRandNameNode(1, $this->dynaFormFile . ".xml");
       $nodeName = $arrayNodeName[0];
       
-      ///////
       $xmlTmp = $this->dynaFormFile . "Tmp.xml";
       
       copy($this->dynaFormFile . ".xml", $xmlTmp);
       
-      ///////
       $posPre = $this->getPosNode($nodeName, $xmlTmp);
       $pos    = ($posPre == $this->numNodes($xmlTmp) - 1)? 0 : $posPre + 1;
       
@@ -596,7 +558,6 @@ class dynaFormHandlerTest extends PHPUnit_Framework_TestCase
       
       $this->assertTrue($this->getPosNode($nodeName, $xmlTmp) == $pos);
       
-      ///////
       unlink($xmlTmp);
     }
 
@@ -657,12 +618,10 @@ class dynaFormHandlerTest extends PHPUnit_Framework_TestCase
       $arrayNodeName = $this->getRandNameNode(1, $this->dynaFormFile . ".xml");
       $nodeName = $arrayNodeName[0];
       
-      ///////
       $xmlTmp = $this->dynaFormFile . "Tmp.xml";
       
       copy($this->dynaFormFile . ".xml", $xmlTmp);
       
-      ///////
       $obj = new dynaFormHandler($xmlTmp);
       
       $obj->addChilds($nodeName, "value node");
@@ -680,7 +639,6 @@ class dynaFormHandlerTest extends PHPUnit_Framework_TestCase
       
       $this->assertTrue($this->nodeExists("SUBNODE1SUBNODE2", $xmlTmp) == 1);
       
-      ///////
       unlink($xmlTmp);
     }
 
@@ -693,12 +651,10 @@ class dynaFormHandlerTest extends PHPUnit_Framework_TestCase
       $arrayNodeName = $this->getRandNameNode(1, $this->dynaFormFile . ".xml");
       $nodeName = $arrayNodeName[0];
       
-      ///////
       $xmlTmp = $this->dynaFormFile . "Tmp.xml";
       
       copy($this->dynaFormFile . ".xml", $xmlTmp);
       
-      ///////
       $obj = new dynaFormHandler($xmlTmp);
       
       $node = $obj->getNode($nodeName);
@@ -719,7 +675,6 @@ class dynaFormHandlerTest extends PHPUnit_Framework_TestCase
       
       $this->assertTrue($sw == 1);
       
-      ///////
       unlink($xmlTmp);
     }
 
@@ -732,7 +687,6 @@ class dynaFormHandlerTest extends PHPUnit_Framework_TestCase
       $arrayNodeName = $this->getRandNameNode(1, $this->dynaFormFile . ".xml");
       $nodeName = $arrayNodeName[0];
       
-      ///////
       $obj = new dynaFormHandler($this->dynaFormFile . ".xml");
       
       $node = $obj->getNode($nodeName);
