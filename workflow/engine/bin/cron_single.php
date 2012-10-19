@@ -96,8 +96,9 @@ require_once ("classes/model/Event.php");
 require_once ("classes/model/AppEvent.php");
 require_once ("classes/model/CaseScheduler.php");
 
-G::LoadClass("pmScript");
 G::LoadClass("case");
+G::LoadClass("dates");
+G::LoadClass("pmScript");
 
 if (!defined('SYS_SYS')) {
     $sObject = $argv[1];
@@ -536,6 +537,8 @@ function executeCaseSelfService()
         setExecutionMessage("Unassigned case");
         saveLog("unassignedCase", "action", "Unassigned case", "c");
 
+        $date = new dates();
+
         while ($rsCriteria->next()) {
             $row = $rsCriteria->getRow();
 
@@ -549,31 +552,14 @@ function executeCaseSelfService()
             $taskSelfServiceTimeUnit = $row["TAS_SELFSERVICE_TIME_UNIT"];
             $taskSelfServiceTriggerUid = $row["TAS_SELFSERVICE_TRIGGER_UID"];
 
-            //Get dates in seconds
-            $arrayDelegateDate = getdate(strtotime($appcacheDelDelegateDate));
-
-            $mktDelegateDate = mktime(
-                $arrayDelegateDate["hours"],
-                $arrayDelegateDate["minutes"],
-                $arrayDelegateDate["seconds"],
-                $arrayDelegateDate["mon"],
-                $arrayDelegateDate["mday"],
-                $arrayDelegateDate["year"]
+            $dueDate = $date->calculateDate(
+                $appcacheDelDelegateDate,
+                $taskSelfServiceTime,
+                $taskSelfServiceTimeUnit, //HOURS|DAYS
+                1
             );
 
-            //TAS_SELFSERVICE_TIME in seconds
-            $t = $taskSelfServiceTime;
-
-            switch ($taskSelfServiceTimeUnit) {
-                case "HOURS":
-                    $t = $taskSelfServiceTime * 60 * 60;
-                    break;
-                case "DAYS":
-                    $t = $taskSelfServiceTime * 24 * 60 * 60;
-                    break;
-            }
-
-            if (time() > $mktDelegateDate + $t) {
+            if (time() > $dueDate["DUE_DATE_SECONDS"]) {
                 //Load data
                 $case = new Cases();
                 $appFields = $case->loadCase($appcacheAppUid);
